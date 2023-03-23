@@ -2,7 +2,6 @@ import glob from 'glob';
 import path from 'path';
 
 import { AsyncContainerModule } from 'inversify';
-import { fileURLToPath } from 'url';
 import { ControllerSymbol } from './controller.js';
 import { Module } from './module.js';
 import { RepositorySymbol } from './repository.js';

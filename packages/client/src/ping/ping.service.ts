@@ -1,4 +1,4 @@
-import { Service } from '../module/service.js';
+import { Service } from '@likelion/bot/src/module/service.js';
 
 export const PingServiceSymbol = Symbol('PingService');
 

@@ -1,4 +1,4 @@
-import { Service } from '../module/service.js';
+import { Service } from '@likelion/bot';
 import { Meeting } from './meeting.js';
 
 export const MeetingServiceSymbol = Symbol('MeetingService');

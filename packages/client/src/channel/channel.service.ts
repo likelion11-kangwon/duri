@@ -1,4 +1,4 @@
-import { Service } from '../module/service.js';
+import { Service } from '@likelion/bot';
 import { Channel } from './channel.js';
 
 export const ChannelServiceSymbol = Symbol('ChannelService');

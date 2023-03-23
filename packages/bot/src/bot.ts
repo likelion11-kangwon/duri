@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   injectable,
   AsyncContainerModule,
@@ -13,7 +14,7 @@ import {
   Routes,
   SlashCommandBuilder,
 } from 'discord.js';
-import { Config, CONFIG_SYMBOL } from './config.js';
+import { BotConfig } from './config.js';
 import { ControllerSymbol } from './module/controller.js';
 import { CommandMetadata, CommandSymbol } from './interaction/command.js';
 import { OptionMetadata, OptionSymbol } from './interaction/option.js';
@@ -42,11 +43,11 @@ export class Bot {
   > = {};
 
   constructor(
-    @inject(CONFIG_SYMBOL) config: Config,
+    @inject(BotConfig) config: BotConfig,
     @multiInject(ControllerSymbol) controllers: Record<string, unknown>[],
   ) {
-    this.applicationId = config.bot.applicationId;
-    this.token = config.bot.token;
+    this.applicationId = config.applicationId;
+    this.token = config.token;
     this.client = new Client({
       intents: [
         GatewayIntentBits.Guilds,
@@ -219,7 +220,7 @@ export class Bot {
   }
 }
 
-export const getBotModule = async () =>
+export const bindBot = async () =>
   new AsyncContainerModule(async (bind) => {
     bind(Bot).toSelf();
   });

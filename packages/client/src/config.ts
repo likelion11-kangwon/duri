@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { AsyncContainerModule } from 'inversify';
 import toml from '@iarna/toml';
 import fs from 'fs/promises';
+import { BotConfig } from '@likelion/bot/src/config.js';
 
 const schema = z
   .object({
@@ -25,9 +26,9 @@ async function configFrom(value: unknown): Promise<Config> {
 // TOML에서 불러온 Config을 Bind하는 모듈을 얻는다
 export const getTomlConfigModule = async (path: string) => {
   const text = await fs.readFile(path).then((text) => text.toString('utf-8'));
-  const config = configFrom(toml.parse(text));
+  const config = await configFrom(toml.parse(text));
 
   return new AsyncContainerModule(async (bind) => {
-    bind<Config>(CONFIG_SYMBOL).toDynamicValue(() => config);
+    bind(BotConfig).toDynamicValue(() => new BotConfig(config.bot));
   });
 };

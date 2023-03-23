@@ -1,18 +1,21 @@
 import 'reflect-metadata';
 
-import { Bot, getBotModule } from './bot.js';
 import { Container } from 'inversify';
-import { getTomlConfigModule } from './config.js';
-import { getAutoLoadedModule } from './module/auto-load.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import { getBotModule, Bot, getAutoLoadedModule } from '@likelion/bot';
+import { getTomlConfigModule } from './config.js';
 
 async function main() {
+  const { DURI_CONFIG } = process.env;
+  if (DURI_CONFIG === undefined)
+    throw new Error('No config file specified with DURI_CONFIG');
+
   // 컨테이너 생성 후 초기화
   const container = new Container();
 
   const botModule = await getBotModule();
-  const configModule = await getTomlConfigModule('.config.toml');
+  const configModule = await getTomlConfigModule(DURI_CONFIG);
   const autoLoadedModules = await getAutoLoadedModule(
     path.dirname(fileURLToPath(import.meta.url)),
   );

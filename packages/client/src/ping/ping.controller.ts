@@ -1,4 +1,11 @@
 import {
+  Command,
+  Controller,
+  Interaction,
+  Option,
+  Button,
+} from '@likelion/bot';
+import {
   ActionRowBuilder,
   ButtonBuilder,
   ButtonInteraction,
@@ -6,11 +13,6 @@ import {
   ChatInputCommandInteraction,
 } from 'discord.js';
 import { inject } from 'inversify';
-import { Button } from '../interaction/button.js';
-import { Command } from '../interaction/command.js';
-import { Interaction } from '../interaction/interaction.js';
-import { Option } from '../interaction/option.js';
-import { Controller } from '../module/controller.js';
 import { PingService, PingServiceSymbol } from './ping.service.js';
 
 @Controller()
