@@ -1,5 +1,5 @@
 import { Service } from '@likelion/bot';
-import { Channel } from './channel.js';
+import { Channel } from '@prisma/client';
 
 export const ChannelServiceSymbol = Symbol('ChannelService');
 

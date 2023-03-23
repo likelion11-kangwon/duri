@@ -13,8 +13,9 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "@likelion/bot": "*",
     "@iarna/toml": "^2.2.5",
+    "@likelion/bot": "*",
+    "@prisma/client": "^4.11.0",
     "discord.js": "^14.8.0",
     "glob": "^9.3.0",
     "inversify": "^6.0.1",

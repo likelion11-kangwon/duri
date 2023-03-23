@@ -1,5 +1,5 @@
 import { Service } from '@likelion/bot';
-import { Meeting } from './meeting.js';
+import { Meeting } from '@prisma/client';
 
 export const MeetingServiceSymbol = Symbol('MeetingService');
 
