@@ -17,6 +17,8 @@
     "typescript": "^5.0.2"
   },
   "lint-staged": {
-    "*.ts": ["eslint"]
+    "*.ts": [
+      "eslint"
+    ]
   }
 }
