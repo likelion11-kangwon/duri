@@ -1,7 +1,10 @@
 {
-  "[typescript][json]": {
+  "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
   "files.eol": "\n",
-  "typescript.preferences.importModuleSpecifierEnding": "js"
+  "typescript.preferences.importModuleSpecifierEnding": "js",
 }
