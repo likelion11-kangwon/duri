@@ -2,6 +2,7 @@
   "name": "@likelion/duri",
   "scripts": {
     "start": "DURI_CONFIG=\"$(pwd)/.config.toml\" pnpm --filter @likelion/duri-client start",
+    "doc": "pnpm --filter @likelion/bot doc --out $(pwd)/docs",
     "prepare": "husky install"
   },
   "devDependencies": {

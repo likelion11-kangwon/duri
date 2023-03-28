@@ -4,6 +4,7 @@ importers:
 
   .:
     specifiers:
+      '@types/jasmine': ^4.3.1
       '@typescript-eslint/eslint-plugin': ^5.55.0
       '@typescript-eslint/parser': ^5.55.0
       eslint: ^8.36.0
@@ -15,6 +16,7 @@ importers:
       typedoc: ^0.23.28
       typescript: ^5.0.2
     devDependencies:
+      '@types/jasmine': 4.3.1
       '@typescript-eslint/eslint-plugin': 5.55.0_qsnvknysi52qtaxqdyqyohkcku
       '@typescript-eslint/parser': 5.55.0_j4766f7ecgqbon3u7zlxn5zszu
       eslint: 8.36.0

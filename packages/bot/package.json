@@ -4,7 +4,8 @@
   "type": "module",
   "main": "src/module.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "doc": "typedoc src/module.ts"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",

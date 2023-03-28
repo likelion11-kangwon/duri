@@ -1,5 +1,5 @@
 export const OptionSymbol = Symbol('Option');
-type OptionType = typeof String | typeof Number | typeof Boolean;
+export type OptionType = typeof String | typeof Number | typeof Boolean;
 
 export type OptionMetadata = {
   parameterIndex: number;
@@ -9,6 +9,28 @@ export type OptionMetadata = {
   required?: boolean;
 };
 
+/**
+ * Command에 인자를 등록하고 주입받기 위한 데코레이터입니다.
+ * @example
+ * ```ts
+ * @Controller()
+ * export class TestController {
+ *    @Command('add', '숫자를 더합니다')
+ *    async add(
+ *      @Interaction() interaction: ChatInputCommandInteraction,
+ *      @Option('a', Number, 'a', true) a: number, // Number 타입의 필수 인자 'a' 추가
+ *      @Option('b', Number, 'b', true) b: number, // Number 타입의 필수 인자 'b' 추가
+ *    ) {
+ *      // ...
+ *    }
+ * }
+ * ```
+ *
+ * @param name 인자 이름
+ * @param type 인자 타입 (Number, String, Boolean)
+ * @param description 인자 설명
+ * @param required 필수 인자 여부
+ */
 export function Option(
   name: string,
   type: OptionType,
