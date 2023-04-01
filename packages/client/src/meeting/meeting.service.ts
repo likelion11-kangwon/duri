@@ -22,6 +22,9 @@ export class MeetingServiceImpl implements MeetingService {
   async createMeeting(
     data: Pick<Meeting, 'place' | 'slots' | 'time'>,
   ): Promise<string> {
+    console.log(data);
+    return '123';
+
     throw new Error('Method not implemented.');
   }
 
