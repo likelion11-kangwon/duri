@@ -189,7 +189,7 @@ export class Bot {
     optionMetadata?: OptionMetadata[],
   ) {
     const prototype = controller.constructor.prototype;
-    return (interaction: Interaction) => {
+    return async (interaction: Interaction) => {
       const args: unknown[] = [];
       // Interaction 파라미터
       const interactionMetadata: InteractionMetadata | undefined =
@@ -236,9 +236,9 @@ export class Bot {
         }
       }
 
-      (controller[method] as (...args: unknown[]) => Promise<void> | void)(
-        ...args,
-      );
+      await (
+        controller[method] as (...args: unknown[]) => Promise<void> | void
+      )(...args);
     };
   }
 
@@ -287,10 +287,9 @@ export class Bot {
             await showError(e.message);
           } else {
             await showError('Internal error');
-          }
-
-          if (e instanceof Error) {
-            console.log(e);
+            if (e instanceof Error) {
+              console.log(e);
+            }
           }
         }
       }
