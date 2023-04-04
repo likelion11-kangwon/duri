@@ -9,8 +9,8 @@ export type OptionMetadata = {
   description: string;
   required?: boolean;
 } & (
-  | { type: 'string' }
-  | { type: 'number' }
+  | { type: 'string'; choices?: { name: string; value: string }[] }
+  | { type: 'number'; choices?: { name: string; value: number }[] }
   | { type: 'boolean' }
   | {
       type: 'channel';

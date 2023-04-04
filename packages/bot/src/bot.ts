@@ -95,20 +95,32 @@ export class Bot {
             )) {
               switch (metadata.type) {
                 case 'string':
-                  command.addStringOption((option) =>
+                  command.addStringOption((option) => {
                     option
                       .setName(metadata.name)
                       .setDescription(metadata.description)
-                      .setRequired(metadata.required ?? false),
-                  );
+                      .setRequired(metadata.required ?? false);
+
+                    if (metadata.choices !== undefined) {
+                      option.setChoices(...metadata.choices);
+                    }
+
+                    return option;
+                  });
                   break;
                 case 'number':
-                  command.addNumberOption((option) =>
+                  command.addNumberOption((option) => {
                     option
                       .setName(metadata.name)
                       .setDescription(metadata.description)
-                      .setRequired(metadata.required ?? false),
-                  );
+                      .setRequired(metadata.required ?? false);
+
+                    if (metadata.choices !== undefined) {
+                      option.setChoices(...metadata.choices);
+                    }
+
+                    return option;
+                  });
                   break;
 
                 case 'boolean':
@@ -126,9 +138,11 @@ export class Bot {
                       .setName(metadata.name)
                       .setDescription(metadata.description)
                       .setRequired(metadata.required ?? false);
+
                     if (metadata.channelTypes !== undefined) {
                       option.addChannelTypes(...metadata.channelTypes);
                     }
+
                     return option;
                   });
               }
