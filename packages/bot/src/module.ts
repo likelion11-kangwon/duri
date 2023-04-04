@@ -4,7 +4,7 @@ export { BotConfig as Config } from './config.js';
 export { Button } from './interaction/button.js';
 export { Command } from './interaction/command.js';
 export { Interaction } from './interaction/interaction.js';
-export { Option, OptionType } from './interaction/option.js';
+export { Option } from './interaction/option.js';
 
 export { Controller } from './module/controller.js';
 export { Service } from './module/service.js';

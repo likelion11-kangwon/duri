@@ -25,7 +25,6 @@ import {
 } from './interaction/interaction.js';
 import { ButtonMetadata, ButtonSymbol } from './interaction/button.js';
 import { UserError } from './errors/user-error.js';
-import { SystemError } from './errors/system-error.js';
 
 @injectable()
 export class Bot {
@@ -96,7 +95,7 @@ export class Bot {
               (a, b) => a.parameterIndex - b.parameterIndex,
             )) {
               switch (metadata.type) {
-                case String:
+                case 'string':
                   command.addStringOption((option) =>
                     option
                       .setName(metadata.name)
@@ -104,7 +103,7 @@ export class Bot {
                       .setRequired(metadata.required ?? false),
                   );
                   break;
-                case Number:
+                case 'number':
                   command.addNumberOption((option) =>
                     option
                       .setName(metadata.name)
@@ -112,6 +111,27 @@ export class Bot {
                       .setRequired(metadata.required ?? false),
                   );
                   break;
+
+                case 'boolean':
+                  command.addBooleanOption((option) =>
+                    option
+                      .setName(metadata.name)
+                      .setDescription(metadata.description)
+                      .setRequired(metadata.required ?? false),
+                  );
+                  break;
+
+                case 'channel':
+                  command.addChannelOption((option) => {
+                    option
+                      .setName(metadata.name)
+                      .setDescription(metadata.description)
+                      .setRequired(metadata.required ?? false);
+                    if (metadata.channelTypes !== undefined) {
+                      option.addChannelTypes(...metadata.channelTypes);
+                    }
+                    return option;
+                  });
               }
             }
           }
@@ -170,20 +190,34 @@ export class Bot {
         if (optionMetadata !== undefined) {
           for (const metadata of optionMetadata) {
             switch (metadata.type) {
-              case String:
+              case 'string':
                 args[metadata.parameterIndex] =
                   interaction.options.getString(
                     metadata.name,
                     metadata.required,
                   ) ?? undefined;
                 break;
-              case Number:
+              case 'number':
                 args[metadata.parameterIndex] =
                   interaction.options.getNumber(
                     metadata.name,
                     metadata.required,
                   ) ?? undefined;
                 break;
+              case 'boolean':
+                args[metadata.parameterIndex] =
+                  interaction.options.getBoolean(
+                    metadata.name,
+                    metadata.required,
+                  ) ?? undefined;
+                break;
+              case 'channel':
+                args[metadata.parameterIndex] =
+                  interaction.options.getChannel(
+                    metadata.name,
+                    metadata.required,
+                    metadata.channelTypes,
+                  ) ?? undefined;
             }
           }
         }

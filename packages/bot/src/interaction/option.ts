@@ -1,13 +1,21 @@
+import { ApplicationCommandOptionAllowedChannelTypes } from 'discord.js';
+
 export const OptionSymbol = Symbol('Option');
-export type OptionType = typeof String | typeof Number | typeof Boolean;
 
 export type OptionMetadata = {
   parameterIndex: number;
   name: string;
-  type: OptionType;
   description: string;
   required?: boolean;
-};
+} & (
+  | { type: 'string' }
+  | { type: 'number' }
+  | { type: 'boolean' }
+  | {
+      type: 'channel';
+      channelTypes?: ApplicationCommandOptionAllowedChannelTypes[];
+    }
+);
 
 /**
  * Command에 인자를 등록하고 주입받기 위한 데코레이터입니다.
@@ -33,7 +41,7 @@ export type OptionMetadata = {
  */
 export function Option(
   name: string,
-  type: OptionType,
+  type: OptionMetadata['type'],
   description: string,
   required?: boolean,
 ): ParameterDecorator {
