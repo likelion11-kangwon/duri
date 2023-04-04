@@ -10,6 +10,7 @@
   "devDependencies": {
     "@types/node": "^18.15.3",
     "@types/node-cron": "^3.0.7",
+    "type-fest": "^3.7.2",
     "typescript": "^5.0.2"
   },
   "dependencies": {

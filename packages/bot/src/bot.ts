@@ -13,7 +13,6 @@ import {
   Interaction,
   Routes,
   SlashCommandBuilder,
-  ModalBuilder,
 } from 'discord.js';
 import { BotConfig } from './config.js';
 import { ControllerSymbol } from './module/controller.js';

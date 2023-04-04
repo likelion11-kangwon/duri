@@ -1,4 +1,5 @@
 import { ApplicationCommandOptionAllowedChannelTypes } from 'discord.js';
+import { Exact } from 'type-fest';
 
 export const OptionSymbol = Symbol('Option');
 
@@ -17,6 +18,10 @@ export type OptionMetadata = {
     }
 );
 
+type AdditionalMetadataOptions<T> = Omit<
+  Extract<OptionMetadata, { type: T }>,
+  'type' | 'name' | 'description' | 'parameterIndex' | 'required'
+>;
 /**
  * Command에 인자를 등록하고 주입받기 위한 데코레이터입니다.
  * @example
@@ -39,11 +44,15 @@ export type OptionMetadata = {
  * @param description 인자 설명
  * @param required 필수 인자 여부
  */
-export function Option(
+export function Option<
+  T extends OptionMetadata['type'],
+  U extends Exact<AdditionalMetadataOptions<T>, U>,
+>(
+  type: T,
   name: string,
-  type: OptionMetadata['type'],
   description: string,
   required?: boolean,
+  additionalOptions?: U,
 ): ParameterDecorator {
   return (target, propertyKey, parameterIndex) => {
     const options = (Reflect.getMetadata(OptionSymbol, target, propertyKey) ??
@@ -55,6 +64,7 @@ export function Option(
       type,
       description,
       required,
+      ...additionalOptions,
     });
 
     Reflect.defineMetadata(OptionSymbol, options, target, propertyKey);
