@@ -13,6 +13,7 @@ import {
   Interaction,
   Routes,
   SlashCommandBuilder,
+  ModalBuilder,
 } from 'discord.js';
 import { BotConfig } from './config.js';
 import { ControllerSymbol } from './module/controller.js';
@@ -23,6 +24,8 @@ import {
   InteractionSymbol,
 } from './interaction/interaction.js';
 import { ButtonMetadata, ButtonSymbol } from './interaction/button.js';
+import { UserError } from './errors/user-error.js';
+import { SystemError } from './errors/system-error.js';
 
 @injectable()
 export class Bot {
@@ -34,12 +37,12 @@ export class Bot {
 
   private commandInteractionHandlers: Record<
     string,
-    (interaction: ChatInputCommandInteraction) => void
+    (interaction: ChatInputCommandInteraction) => Promise<void> | void
   > = {};
 
   private buttonInteractionHandlers: Record<
     string,
-    (interaction: ButtonInteraction) => void
+    (interaction: ButtonInteraction) => Promise<void> | void
   > = {};
 
   constructor(
@@ -138,13 +141,13 @@ export class Bot {
     controller: unknown,
     method: string,
     optionMetadata?: OptionMetadata[],
-  ): (interaction: ChatInputCommandInteraction) => void;
+  ): (interaction: ChatInputCommandInteraction) => Promise<void> | void;
 
   private getInteractionHandler(
     buttonMetadata: ButtonMetadata,
     controller: unknown,
     method: string,
-  ): (interaction: ButtonInteraction) => void;
+  ): (interaction: ButtonInteraction) => Promise<void> | void;
 
   private getInteractionHandler(
     _metadata: unknown,
@@ -186,7 +189,9 @@ export class Bot {
         }
       }
 
-      (controller[method] as (...args: unknown[]) => void)(...args);
+      (controller[method] as (...args: unknown[]) => Promise<void> | void)(
+        ...args,
+      );
     };
   }
 
@@ -203,16 +208,44 @@ export class Bot {
       );
     }
 
-    this.client.on('interactionCreate', (interaction) => {
-      if (interaction.isChatInputCommand()) {
-        const command =
-          this.commandInteractionHandlers[interaction.commandName];
-        command(interaction);
-      }
+    this.client.on('interactionCreate', async (interaction) => {
+      let showError: ((message: string) => Promise<void> | void) | undefined =
+        undefined;
 
-      if (interaction.isButton()) {
-        const command = this.buttonInteractionHandlers[interaction.customId];
-        command(interaction);
+      try {
+        if (interaction.isChatInputCommand()) {
+          showError = async (message: string) => {
+            await interaction.reply({
+              content: message,
+              ephemeral: true,
+            });
+          };
+
+          const command =
+            this.commandInteractionHandlers[interaction.commandName];
+          await command(interaction);
+        }
+
+        if (interaction.isButton()) {
+          showError = async (message: string) => {
+            await interaction.reply({ content: message, ephemeral: true });
+          };
+
+          const command = this.buttonInteractionHandlers[interaction.customId];
+          await command(interaction);
+        }
+      } catch (e) {
+        if (showError !== undefined) {
+          if (e instanceof UserError) {
+            await showError(e.message);
+          } else {
+            await showError('Internal error');
+          }
+
+          if (e instanceof Error) {
+            console.log(e);
+          }
+        }
       }
     });
 
